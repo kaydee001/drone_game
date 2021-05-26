@@ -13,9 +13,11 @@ public class movement : MonoBehaviour
     public float currentY;
     public float rotAmt = 2.5f;
     public float rotVel;
+    public static bool isMovingForward;
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        isMovingForward = false;
     }
 
     void FixedUpdate()
@@ -28,15 +30,15 @@ public class movement : MonoBehaviour
     }    
     void moveUp()
     {
-        if(Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
             upForce = 125;
         }
-        else if(Input.GetKey(KeyCode.X))
+        else if (Input.GetKey(KeyCode.X))
         {
             upForce = -50;
         }
-        else if(!Input.GetKey(KeyCode.Space) && !Input.GetKey(KeyCode.X))
+        else if (!Input.GetKey(KeyCode.Space) && !Input.GetKey(KeyCode.X))
         {
             upForce = 9.8f;
         }
@@ -47,6 +49,11 @@ public class movement : MonoBehaviour
         {
             rb.AddRelativeForce(Vector3.forward * Input.GetAxis("Vertical") * forSpeed);
             tiltForward = Mathf.SmoothDamp(tiltForward, 5 * Input.GetAxis("Vertical"), ref tiltVelFor, 0.01f);
+            isMovingForward = true;
+        }
+        else
+        {
+            isMovingForward = false;
         }
     }
     void rot()

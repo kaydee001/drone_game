@@ -7,13 +7,12 @@ public class fuel : MonoBehaviour
 {
     public float cfuel = 100f;
     public Text ftext;
-    public float d;
-    public float b = 1f ;
-    bool isMoving;
+    public float decreaseRate = 1f;
+    public bool isMoving = false;
+    public movement isMovingForward;
     void Start()
     {
-        d = b;
-        isMoving = true;
+        isMoving = false;
     }
 
     void Update()
@@ -22,34 +21,28 @@ public class fuel : MonoBehaviour
     }
     void decrease()
     {
-        if (isMoving == true)
+        if (isMovingForward == true)
         {
-            if (d > 0)
-            {
-                d -= Time.deltaTime;
-            }
-            else
-            {
-                d = b;
-                cfuel -= 1f;
-            }
+            decreaseRate = 2f;
+            cfuel -= decreaseRate * Time.deltaTime;
         }
-        ftext.text = "Battery : " + cfuel + "%";
+        else
+        {
+            cfuel -= decreaseRate * Time.deltaTime;
+        }
+        ftext.text = "Battery : " + cfuel.ToString("00") + "%";
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if(other.CompareTag("fuel"))
         {
-            if(cfuel==100f)
+            cfuel += 10f;
+            if(cfuel>=100)
             {
                 cfuel = 100f;
-                Destroy(gameObject);
+                Destroy(other.gameObject);
             }
-            else
-            {
-                cfuel += 10f;
-                Destroy(gameObject);
-            }
+            Destroy(other.gameObject);
         }
     }
 }
